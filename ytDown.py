@@ -1,12 +1,35 @@
-import pytube
+import yt_dlp
 
-def downloadFromLink(link):
-    SAVE_PATH = '/home/mias/Documentos/Github/Telegram Bots/Mias/Python/miasBot/Out'
-    try:
-        yt = pytube.YouTube(link)
-        stream = yt.streams.filter(file_extension='mp4').first()
-        stream.download(output_path=SAVE_PATH)
-    except:
-        return -1
+class YoutubeDown():
+    def __init__(self, link:str):
+        self.link = link
+        
+        self.ydl_videoOptions = {
+            'outtmpl': 'Out/%(title)s.%(ext)s',
+            'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4'
+        }
+        
+        self.ydl_audioOptions = {
+            'outtmpl': 'Out/%(title)s.%(ext)s',
+            'format': 'bestaudio[ext=m4a]/mp4'
+        }
+
+    def downloadVideo(self):
+        try:
+            ydl = yt_dlp.YoutubeDL(self.ydl_videoOptions)
+            ydl.download([self.link])
+            info_video = ydl.extract_info(self.link, download=False)
+        except:
+            return -1
+        
+        return info_video
     
-    return yt
+    def downloadAudio(self):
+        try:
+            ydl = yt_dlp.YoutubeDL(self.ydl_audioOptions)
+            ydl.download([self.link])
+            info_audio = ydl.extract_info(self.link, download=False)
+        except:
+            return -1
+        
+        return info_audio
