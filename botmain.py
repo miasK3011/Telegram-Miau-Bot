@@ -1,11 +1,13 @@
 from ytDown import YoutubeDown
-from telebot.types import BotCommand
+from telebot.types import BotCommand, InputFile
 from dotenv import load_dotenv
+from cardapio import Cardapio
 import telebot
 import os
 
 ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
 DOWNLOADS_PATH = os.path.join(ROOT_PATH, 'Download/')
+c = Cardapio()
 
 load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
@@ -78,7 +80,9 @@ def download_only_audio(message):
     
 @bot.message_handler(commands=['cardapio'])
 def download_cardapio(message):
-    bot.send_message(chat_id=message.chat.id, text='Alou teste')
-
+    bot.send_message(chat_id=message.chat.id, text="Resgatando cardápio de hoje!")
+    url = c.get()
+    bot.send_document(chat_id=message.chat.id, document=url, caption="Cardápio de hoje no RU.")
+    
 print("Bot rodando ;)...")
 bot.infinity_polling() 
