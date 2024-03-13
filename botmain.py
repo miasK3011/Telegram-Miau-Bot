@@ -1,13 +1,15 @@
 from ytDown import YoutubeDown
 from telebot.types import BotCommand
-from apiToken import APITOKEN
+from dotenv import load_dotenv
 import telebot
 import os
 
 ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
 DOWNLOADS_PATH = os.path.join(ROOT_PATH, 'Download/')
 
-bot = telebot.TeleBot(APITOKEN, parse_mode=None)
+load_dotenv()
+BOT_TOKEN = os.getenv('BOT_TOKEN')
+bot = telebot.TeleBot(BOT_TOKEN, parse_mode=None)
 
 def sendFile(message, file, audio = False):
     if file == -1:
@@ -43,7 +45,8 @@ commands = [
     BotCommand(command='/start', description='Iniciar o bot'),
     BotCommand(command='/help', description='Lista de comandos disponíveis'),
     BotCommand(command='/d', description='Baixar um vídeo'),
-    BotCommand(command='/a', description='Baixar audio de um video')
+    BotCommand(command='/a', description='Baixar audio de um video'),
+    BotCommand(command='/cardapio', description='Cardápio atual do RU.')
 ]
 
 bot.set_my_commands(commands)
@@ -72,6 +75,10 @@ def download_only_audio(message):
     yt = YoutubeDown(link)
     file = yt.downloadAudio()
     sendFile(message, file, True)
+    
+@bot.message_handler(commands=['cardapio'])
+def download_cardapio(message):
+    bot.send_message(chat_id=message.chat.id, text='Alou teste')
 
 print("Bot rodando ;)...")
 bot.infinity_polling() 
