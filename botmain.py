@@ -1,12 +1,13 @@
 from ytDown import YoutubeDown
 from telebot.types import BotCommand
+from apiToken import APITOKEN
 import telebot
 import os
 
-DOWNLOADS_PATH = '/home/mias/Documentos/Github/Telegram Bots/Mias/Python/miasBot/Out'
-BOT_TOKEN = open('/home/mias/Documentos/Github/Telegram Bots/telegramToken.txt')
+ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
+DOWNLOADS_PATH = os.path.join(ROOT_PATH, 'Download/')
 
-bot = telebot.TeleBot(BOT_TOKEN.read(), parse_mode=None)
+bot = telebot.TeleBot(APITOKEN, parse_mode=None)
 
 def sendFile(message, file, audio = False):
     if file == -1:
@@ -28,14 +29,14 @@ def sendFile(message, file, audio = False):
                 audio = open(videoPath, 'rb'),
                 title = title
             )
-            os.remove('/home/mias/Documentos/Github/Telegram Bots/Mias/Python/miasBot/Out/'+ title +'.m4a')
+            os.remove(DOWNLOADS_PATH + title +'.mp3')
         else:
             bot.send_video(
                 chat_id = message.chat.id,
                 video = open(videoPath, 'rb'),
                 caption=f'Título do vídeo: {title}\n'
             )
-            os.remove('/home/mias/Documentos/Github/Telegram Bots/Mias/Python/miasBot/Out/'+ title +'.mp4')
+            os.remove(DOWNLOADS_PATH + title +'.mp4')
             
         
 commands = [
@@ -71,5 +72,6 @@ def download_only_audio(message):
     yt = YoutubeDown(link)
     file = yt.downloadAudio()
     sendFile(message, file, True)
-    
+
+print("Bot rodando ;)...")
 bot.infinity_polling() 
