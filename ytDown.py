@@ -5,13 +5,13 @@ class YoutubeDown():
         self.link = link
         
         self.ydl_videoOptions = {
-            'outtmpl': 'Out/%(title)s.%(ext)s',
+            'outtmpl': 'Download/%(title)s.%(ext)s',
             'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4'
         }
         
         self.ydl_audioOptions = {
-            'outtmpl': 'Out/%(title)s.%(ext)s',
-            'format': 'bestaudio[ext=m4a]/mp4'
+            'outtmpl': 'Download/%(title)s.mp3',
+            'format': 'bestaudio'
         }
 
     def downloadVideo(self):
