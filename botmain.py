@@ -1,13 +1,16 @@
 from ytDown import YoutubeDown
+import pyktok as pyk
 from telebot.types import BotCommand, InputFile
 from dotenv import load_dotenv
 from cardapio import Cardapio
+from catAPI import getCatImage
 import telebot
 import os
 
 ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
 DOWNLOADS_PATH = os.path.join(ROOT_PATH, 'Download/')
 c = Cardapio()
+pyk.specify_browser('chrome')
 
 load_dotenv()
 BOT_TOKEN = os.getenv('BOT_TOKEN')
@@ -46,9 +49,10 @@ def sendFile(message, file, audio = False):
 commands = [
     BotCommand(command='/start', description='Iniciar o bot'),
     BotCommand(command='/help', description='Lista de comandos disponíveis'),
-    BotCommand(command='/d', description='Baixar um vídeo'),
+    BotCommand(command='/yt', description='Baixar um vídeo'),
     BotCommand(command='/a', description='Baixar audio de um video'),
-    BotCommand(command='/cardapio', description='Cardápio atual do RU.')
+    BotCommand(command='/cardapio', description='Cardápio atual do RU.'),
+    BotCommand(command='/gato', description='Gato aleatorio')
 ]
 
 bot.set_my_commands(commands)
@@ -59,16 +63,15 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['help'])
 def send_help(message):
-	bot.reply_to(message, "/d: Baixa um video de um link dado.")
+	bot.reply_to(message, "/yt: Baixa um video de um link dado.")
 
-@bot.message_handler(commands=['d'])
+@bot.message_handler(commands=['yt'])
 def download_from_link(message):
     link = message.text
     link = link.split()[1]
     yt = YoutubeDown(link)
     file = yt.downloadVideo()
     sendFile(message, file)
-    
     
 @bot.message_handler(commands=['a'])
 def download_only_audio(message):
@@ -81,8 +84,14 @@ def download_only_audio(message):
 @bot.message_handler(commands=['cardapio'])
 def download_cardapio(message):
     bot.send_message(chat_id=message.chat.id, text="Resgatando cardápio de hoje!")
+    bot.send_photo()
     url = c.get()
     bot.send_document(chat_id=message.chat.id, document=url, caption="Cardápio de hoje no RU.")
+    
+@bot.message_handler(commands=['gato'])
+def send_cat_image(message):
+    cat_url = getCatImage()
+    bot.send_photo(chat_id=message.chat.id, photo=cat_url) 
     
 print("Bot rodando ;)...")
 bot.infinity_polling() 
