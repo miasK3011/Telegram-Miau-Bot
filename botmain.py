@@ -101,7 +101,10 @@ def download_cardapio(message):
 @bot.message_handler(commands=["gato"])
 def send_cat_image(message):
     cat_url = getCatImage()
-    bot.send_photo(chat_id=message.chat.id, photo=cat_url)
+    if cat_url == None:
+        bot.send_message(chat_id=message.chat_id, text="Gatinhos não tão afim de aparecer :(")
+    else:
+        bot.send_photo(chat_id=message.chat.id, photo=cat_url)
 
 
 print("Bot rodando ;)...")

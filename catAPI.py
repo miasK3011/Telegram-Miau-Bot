@@ -9,5 +9,7 @@ def getCatImage():
         cat_data = response.json()
         cat_url = cat_data[0]["url"]
         #print(f"A URL da imagem do gato é: {cat_url}")
-        
+    if response.status_code == 400:
+        cat_url = None
+
     return cat_url
