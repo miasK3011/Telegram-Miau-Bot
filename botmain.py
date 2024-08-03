@@ -2,11 +2,12 @@ import os
 
 import telebot
 from dotenv import load_dotenv
-from telebot.types import BotCommand, InputFile
+from telebot.types import BotCommand
 
 from cardapio import Cardapio
 from catAPI import getCatImage
 from ytDown import YoutubeDown
+from dogAPI import getDogImage
 
 ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
 DOWNLOADS_PATH = os.path.join(ROOT_PATH, "Download/")
@@ -53,6 +54,7 @@ commands = [
     BotCommand(command="/a", description="Baixar audio de um video"),
     BotCommand(command="/cardapio", description="Cardápio atual do RU."),
     BotCommand(command="/gato", description="Gato aleatorio"),
+    BotCommand(command="/cachorro", description="Cachorro aleatorio"),
 ]
 
 bot.set_my_commands(commands)
@@ -102,10 +104,17 @@ def download_cardapio(message):
 def send_cat_image(message):
     cat_url = getCatImage()
     if cat_url == None:
-        bot.send_message(chat_id=message.chat_id, text="Gatinhos não tão afim de aparecer :(")
+        bot.send_message(chat_id=message.chat.id, text="Gatinhos não tão afim de aparecer :(")
     else:
         bot.send_photo(chat_id=message.chat.id, photo=cat_url)
 
+@bot.message_handler(commands=["cachorro"])
+def send_dog_image(message):
+    dog_url = getDogImage()
+    if dog_url == None:
+        bot.send_message(chat_id=message.chat.id, text="Cachorrinhos não tão afim de aparecer :(")
+    else:
+        bot.send_photo(chat_id=message.chat.id, photo=dog_url)
 
 print("Bot rodando ;)...")
 bot.infinity_polling()
