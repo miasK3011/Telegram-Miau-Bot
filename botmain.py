@@ -50,7 +50,6 @@ commands = [
     BotCommand(command="/start", description="Iniciar o bot"),
     BotCommand(command="/help", description="Lista de comandos disponíveis"),
     BotCommand(command="/yt", description="Baixar um vídeo do youtube"),
-    # BotCommand(command='/tk', description='Baixar um vídeo do TikTok'),
     BotCommand(command="/a", description="Baixar audio de um video"),
     BotCommand(command="/cardapio", description="Cardápio atual do RU."),
     BotCommand(command="/gato", description="Gato aleatorio"),
