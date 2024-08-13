@@ -93,27 +93,44 @@ def download_only_audio(message):
 @bot.message_handler(commands=["cardapio"])
 def download_cardapio(message):
     bot.send_message(chat_id=message.chat.id, text="Resgatando cardápio de hoje!")
-    url = c.get()
-    bot.send_document(
-        chat_id=message.chat.id, document=url, caption="Cardápio de hoje no RU."
-    )
+    filename, error = c.get()
+    
+    if error:
+        print(error)
+        bot.send_message(chat_id=message.chat.id, text=f"Erro ao resgatar cardápio :(")
+        return
+        
+    if filename:
+        with open(filename, 'rb') as pdf_file:
+            bot.send_document(
+                chat_id=message.chat.id, 
+                document=pdf_file, 
+                caption="Cardápio de hoje no RU."
+            )
+        os.remove(filename)
 
 
 @bot.message_handler(commands=["gato"])
 def send_cat_image(message):
     cat_url = getCatImage()
     if cat_url == None:
-        bot.send_message(chat_id=message.chat.id, text="Gatinhos não tão afim de aparecer :(")
+        bot.send_message(
+            chat_id=message.chat.id, text="Gatinhos não tão afim de aparecer :("
+        )
     else:
         bot.send_photo(chat_id=message.chat.id, photo=cat_url)
+
 
 @bot.message_handler(commands=["cachorro"])
 def send_dog_image(message):
     dog_url = getDogImage()
     if dog_url == None:
-        bot.send_message(chat_id=message.chat.id, text="Cachorrinhos não tão afim de aparecer :(")
+        bot.send_message(
+            chat_id=message.chat.id, text="Cachorrinhos não tão afim de aparecer :("
+        )
     else:
         bot.send_photo(chat_id=message.chat.id, photo=dog_url)
+
 
 print("Bot rodando ;)...")
 bot.infinity_polling()
