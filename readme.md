@@ -14,9 +14,7 @@ Antes de iniciar, assegure-se de que você tenha os seguintes componentes instal
 
 ## Passos para Configuração do Ambiente
 
-### 1. Clone o Repositório (Opcional)
-
-Se o projeto estiver em um repositório git, clone-o utilizando:
+### 1. Clone o Repositório
 
 ```bash
 git clone [URL_DO_REPOSITÓRIO]
