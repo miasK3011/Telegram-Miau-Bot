@@ -1,8 +1,6 @@
 import os
-import telebot
-from dotenv import load_dotenv
 
-from configs.cfg import BOT_COMMANDS, DOWNLOADS_PATH
+from configs.cfg import BOT_COMMANDS
 
 from configs.setEnv import setEnvironment
 from features.cardapio import Cardapio 
@@ -50,7 +48,7 @@ def download_cardapio(message):
 
     if error:
         print(error)
-        bot.send_message(chat_id=message.chat.id, text=f"Erro ao resgatar cardápio :(")
+        bot.send_message(chat_id=message.chat.id, text="Erro ao resgatar cardápio :(")
         return
 
     if filename:
@@ -65,7 +63,7 @@ def download_cardapio(message):
 @bot.message_handler(commands=["gato"])
 def send_cat_image(message):
     cat_url = getCatImage()
-    if cat_url == None:
+    if cat_url is None:
         bot.send_message(
             chat_id=message.chat.id, text="Gatinhos não tão afim de aparecer :("
         )
@@ -75,7 +73,7 @@ def send_cat_image(message):
 @bot.message_handler(commands=["cachorro"])
 def send_dog_image(message):
     dog_url = getDogImage()
-    if dog_url == None:
+    if dog_url is None:
         bot.send_message(
             chat_id=message.chat.id, text="Cachorrinhos não tão afim de aparecer :("
         )
