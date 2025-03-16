@@ -14,11 +14,13 @@ DOWNLOADS_PATH = os.path.join(ROOT_PATH, "Download/")
 c = Cardapio()
 
 load_dotenv()
-BOT_TOKEN = os.getenv("BOT_TOKEN_DEV")
-ORDER_ID = os.getenv("ORDER_NO")
-LSS_ID = os.getenv("LSS_ID")
-bot = telebot.TeleBot(BOT_TOKEN, parse_mode=None)
+BOT_TOKEN = ""
+if os.getenv("ENV") == "prod":
+    BOT_TOKEN = os.getenv("BOT_TOKEN", '')
+else:
+    BOT_TOKEN = os.getenv("BOT_TOKEN_DEV", '')
 
+bot = telebot.TeleBot(BOT_TOKEN, parse_mode=None)
 
 def sendFile(message, file, audio=False):
     if file == -1:
@@ -59,7 +61,6 @@ commands = [
 ]
 
 bot.set_my_commands(commands)
-
 
 @bot.message_handler(commands=["start"])
 def send_welcome(message):
