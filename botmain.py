@@ -7,7 +7,6 @@ from telebot.types import BotCommand
 from cardapio import Cardapio
 from catAPI import getCatImage
 from dogAPI import getDogImage
-from rastreio import rastreio
 from ytDown import YoutubeDown
 
 ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
@@ -57,7 +56,6 @@ commands = [
     BotCommand(command="/cardapio", description="Cardápio atual do RU."),
     BotCommand(command="/gato", description="Gato aleatorio"),
     BotCommand(command="/cachorro", description="Cachorro aleatorio"),
-    BotCommand(command="/rastreio", description="Rastrear S23"),
 ]
 
 bot.set_my_commands(commands)
@@ -134,26 +132,6 @@ def send_dog_image(message):
         )
     else:
         bot.send_photo(chat_id=message.chat.id, photo=dog_url)
-
-
-@bot.message_handler(commands=["rastreio"])
-def send_rastreio(message):
-    response = rastreio(ORDER_ID, LSS_ID)
-    response_message = "<b>Status do Pedido:</b>\n\n" 
-    itens = response.get("itens", [])
-    if itens:
-        descricao_item = itens[0].get("desc", "Descrição indisponível")
-        response_message += f"{descricao_item}\n\n"
-        
-    for event in response.get("events", []):
-        date = event.get("date", "Data indisponível")
-        label = event.get("label", "Descrição indisponível")
-
-        response_message += f"Data: {date}\n"
-        response_message += f"Evento: {label}\n"
-        response_message += "-" * 20 + "\n" 
-    
-    bot.reply_to(message, response_message, parse_mode="HTML")
 
 print("Bot rodando ;)...")
 bot.infinity_polling()
